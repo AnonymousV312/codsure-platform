@@ -9,6 +9,7 @@ app = FastAPI(title="CODSure Shopify Connector")
 
 CODSURE_API_URL = os.getenv("CODSURE_API_URL", "http://localhost:8000/api/v1")
 SHOPIFY_API_SECRET = os.getenv("SHOPIFY_API_SECRET", "secret")
+INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "INTERNAL_SERVICE_SECRET_KEY_CHANGE_ME")
 
 @app.post("/webhooks/orders/create")
 async def handle_order_create(request: Request, background_tasks: BackgroundTasks):
@@ -47,13 +48,14 @@ async def process_order(order_data: dict):
     
     async with httpx.AsyncClient() as client:
         # Call Risk API
-        # Needs Auth token. For now assuming internal network or API Key.
-        # We'll skip Auth for this V1 mock or use a service token.
         try:
-            response = await client.post(f"{CODSURE_API_URL}/risk/analyze", json=payload)
+            headers = {"x-internal-key": INTERNAL_API_KEY}
+            response = await client.post(f"{CODSURE_API_URL}/risk/analyze", json=payload, headers=headers)
             if response.status_code == 200:
                 decision = response.json()
                 await tag_shopify_order(order_id, decision["decision"])
+            else:
+                print(f"Risk API Error: {response.status_code} {response.text}")
         except Exception as e:
             print(f"Error processing order: {e}")
 

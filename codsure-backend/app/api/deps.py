@@ -11,12 +11,18 @@ from app.models.user import User
 from app.schemas.token import TokenPayload
 from sqlalchemy import select
 
-reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token")
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token", auto_error=False)
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db),
     token: str = Depends(reusable_oauth2)
 ) -> User:
+    if not token:
+         raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
@@ -33,6 +39,24 @@ async def get_current_user(
     
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+async def get_current_user_optional(
+    db: AsyncSession = Depends(get_db),
+    token: str = Depends(reusable_oauth2)
+) -> Optional[User]:
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
+        )
+        token_data = TokenPayload(**payload)
+    except (JWTError, ValidationError):
+        return None
+    
+    result = await db.execute(select(User).where(User.id == token_data.sub))
+    user = result.scalars().first()
     return user
 
 async def get_current_active_user(

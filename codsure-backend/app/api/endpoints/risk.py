@@ -1,9 +1,10 @@
-from typing import Any
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Any, Optional
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.api import deps
+from app.core.config import settings
 from app.db.session import get_db
 from app.models.user import User
 from app.models.store import Store
@@ -19,21 +20,35 @@ async def analyze_order(
     *,
     db: AsyncSession = Depends(get_db),
     risk_in: RiskAnalysisRequest,
-    current_user: User = Depends(deps.get_current_active_user),
+    current_user: Optional[User] = Depends(deps.get_current_user_optional), # Use optional dependency
+    x_internal_key: Optional[str] = Header(None), # Internal service key
 ) -> Any:
     """
     Analyze an order for COD risk.
     """
-    # 1. Verify Store ownership (or allowed access)
+    # 1. Verify Auth (User OR Internal Key)
+    is_internal = False
+    if x_internal_key and x_internal_key == settings.INTERNAL_API_KEY:
+        is_internal = True
+    elif current_user:
+        if not current_user.is_active:
+             raise HTTPException(status_code=400, detail="Inactive user")
+    else:
+        # Neither valid internal key nor valid user
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    # 2. Verify Store ownership (or allowed access)
     result = await db.execute(select(Store).where(Store.id == risk_in.store_id))
     store = result.scalars().first()
     if not store:
         raise HTTPException(status_code=404, detail="Store not found")
     
-    if store.owner_id != current_user.id and not current_user.is_superuser:
-        raise HTTPException(status_code=403, detail="Not authorized to access this store")
+    # If not internal, check user ownership
+    if not is_internal:
+        if store.owner_id != current_user.id and not current_user.is_superuser:
+            raise HTTPException(status_code=403, detail="Not authorized to access this store")
 
-    # 2. Get history (Mocked for now, in real app query Customers table)
+    # 3. Get history (Mocked for now)
     customer_history = {
         "refusal_rate": 10, # Mock
         "total_orders": 5   # Mock
