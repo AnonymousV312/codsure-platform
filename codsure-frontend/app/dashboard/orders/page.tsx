@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
+import { Search, Download, Filter, ShieldCheck } from "lucide-react"
 
 export default function OrdersPage() {
     return (
@@ -34,6 +34,7 @@ export default function OrdersPage() {
                                     <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Customer</th>
                                     <th className="h-12 px-4 align-middle font-medium text-muted-foreground">City</th>
                                     <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Amount</th>
+                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Cust. Trust</th>
                                     <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Risk Score</th>
                                     <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Decision</th>
                                 </tr>
@@ -45,6 +46,12 @@ export default function OrdersPage() {
                                         <td className="p-4 align-middle">0300-123456{i}</td>
                                         <td className="p-4 align-middle">{i % 2 === 0 ? "Lahore" : "Karachi"}</td>
                                         <td className="p-4 align-middle">PKR {1000 * i + 500}</td>
+                                        <td className="p-4 align-middle">
+                                            <div className="flex items-center gap-1">
+                                                <span className="font-semibold">{50 + (i * 5)}</span>
+                                                {50 + (i * 5) > 70 && <ShieldCheck className="h-3 w-3 text-green-600" />}
+                                            </div>
+                                        </td>
                                         <td className="p-4 align-middle">
                                             <div className="flex items-center gap-2">
                                                 <span className="font-bold">{i * 10}</span>

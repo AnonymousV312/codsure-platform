@@ -13,16 +13,19 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 136 78% 20%; /* Deep Green #0B5D1E */
+    --primary: 162 67% 18%;
+    /* Deep Green #0F4C3A */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 73% 14%; /* Dark Blue #0A2540 */
+    --secondary: 224 64% 33%;
+    /* Navy Blue #1E3A8A */
     --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 37 91% 55%; /* Amber #F5A623 */
+    --accent: 38 92% 50%;
+    /* Alert Amber #F59E0B */
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -70,6 +73,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

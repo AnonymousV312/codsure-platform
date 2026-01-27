@@ -24,4 +24,5 @@ class Store(Base):
     orders: Mapped[list["Order"]] = relationship(back_populates="store")
     
     risk_tolerance: Mapped[int] = mapped_column(Integer, default=50) # 0-100 (Conservative -> Aggressive)
+    trust_score: Mapped[float] = mapped_column(Float, default=100.0) # Seller Trust Score (0-100)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

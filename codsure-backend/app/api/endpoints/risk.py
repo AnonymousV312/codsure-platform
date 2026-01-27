@@ -48,14 +48,19 @@ async def analyze_order(
         if store.owner_id != current_user.id and not current_user.is_superuser:
             raise HTTPException(status_code=403, detail="Not authorized to access this store")
 
-    # 3. Get history (Mocked for now)
+    # 3. Get history (Mocked for now, in real app query Customers table)
     customer_history = {
         "refusal_rate": 10, # Mock
-        "total_orders": 5   # Mock
+        "total_orders": 5,   # Mock
+        "trust_score": 50.0 # Default
     }
     
-    # 3. Calculate Risk
-    risk_result = risk_engine.calculate_risk(risk_in.model_dump(), customer_history)
+    # 4. Calculate Risk with Trust Score
+    risk_result = risk_engine.calculate_risk(
+        risk_in.model_dump(), 
+        customer_history,
+        store_trust_score=store.trust_score
+    )
     
     # 4. Save Order
     order = Order(
