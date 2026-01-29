@@ -17,6 +17,9 @@ class Store(Base):
     platform: Mapped[str] = mapped_column(String, default="shopify") # shopify, woocommerce
     domain: Mapped[str] = mapped_column(String, unique=True, index=True)
     access_token: Mapped[str | None] = mapped_column(String, nullable=True) # Encrypt this in production
+    scope: Mapped[str | None] = mapped_column(String, nullable=True)
+    status: Mapped[str] = mapped_column(String, default="disconnected") # connected, disconnected
+    connected_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     owner: Mapped["User"] = relationship(back_populates="stores")

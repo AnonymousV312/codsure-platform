@@ -12,18 +12,18 @@ export function RecentSales() {
     return (
         <div className="space-y-4">
             {orders.map((order: any) => (
-                <div key={order.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
+                <div key={order.order_number} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
                     <div className="flex items-center space-x-4">
-                        <div className={`w-2 h-2 rounded-full ${order.risk_decision === 'BLOCK' ? 'bg-red-500' : (order.risk_decision === 'PARTIAL_ADVANCE' ? 'bg-yellow-500' : 'bg-green-500')}`} />
+                        <div className={`w-2 h-2 rounded-full ${order.status === 'BLOCK' ? 'bg-red-500' : (order.status === 'PARTIAL_ADVANCE' ? 'bg-yellow-500' : 'bg-green-500')}`} />
                         <div>
-                            <p className="text-sm font-medium leading-none">Order {order.external_order_id}</p>
-                            <p className="text-sm text-muted-foreground">{order.customer_city} • {order.customer_phone}</p>
+                            <p className="text-sm font-medium leading-none">Order {order.order_number}</p>
+                            <p className="text-sm text-muted-foreground">{order.customer_name}</p>
                         </div>
                     </div>
                     <div className="flex items-col space-y-1 text-right">
-                        <div className="text-sm font-bold">₨ {order.total_price.toLocaleString()}</div>
-                        <Badge variant={order.risk_decision === 'BLOCK' ? 'destructive' : 'outline'} className="ml-auto text-xs">
-                            {order.risk_decision}
+                        <div className="text-sm font-bold">₨ {order.amount.toLocaleString()}</div>
+                        <Badge variant={order.status === 'BLOCK' ? 'destructive' : 'outline'} className="ml-auto text-xs">
+                            {order.status}
                         </Badge>
                     </div>
                 </div>

@@ -71,10 +71,10 @@ async def get_dashboard_stats(
 
 
     return {
-        "total_revenue": total_revenue,
-        "total_orders": total_orders,
+        "revenue": total_revenue,
+        "orders": total_orders,
         "return_rate": round(return_rate, 1),
-        "risk_blocked_count": risk_blocked_count
+        "risk_prevented": risk_blocked_count
     }
 
 @router.get("/chart")
@@ -125,6 +125,7 @@ async def get_dashboard_chart(
 async def get_recent_orders(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(deps.get_current_active_user),
+    limit: int = 10
 ) -> Any:
     """
     Get recent orders.
@@ -135,11 +136,65 @@ async def get_recent_orders(
     if not store_ids:
         return []
 
-    query = select(Order).where(Order.store_id.in_(store_ids)).order_by(desc(Order.analyzed_at)).limit(10)
+    query = select(Order).where(Order.store_id.in_(store_ids)).order_by(desc(Order.analyzed_at)).limit(limit)
     result = await db.execute(query)
     orders = result.scalars().all()
     
-    return orders
+    return [
+        {
+            "id": str(o.external_order_id),
+            "order_number": o.order_number,
+            "customer_name": o.customer_email or o.customer_phone or "Unknown",
+            "amount": o.total_price,
+            "status": o.risk_decision if o.risk_decision else "PENDING", 
+            "risk_score": o.risk_score,
+            "date": o.analyzed_at.isoformat()
+        } for o in orders
+    ]
+
+@router.get("/orders")
+async def get_merchant_orders(
+    page: int = 1,
+    limit: int = 20,
+    status: str = "any",
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Get all orders for the merchant with pagination and filtering.
+    """
+    result = await db.execute(select(Store.id).where(Store.owner_id == current_user.id))
+    store_ids = result.scalars().all()
+    
+    if not store_ids:
+        return {"orders": [], "total": 0, "page": page}
+
+    offset = (page - 1) * limit
+    
+    # Base query
+    query = select(Order).where(Order.store_id.in_(store_ids))
+    
+    # Filters
+    if status != "any":
+        # Map common statuses
+        pass # Implement status filtering logic later
+
+    # Count total
+    count_query = select(func.count(Order.id)).where(Order.store_id.in_(store_ids)) # Re-apply filters if added
+    total_result = await db.execute(count_query)
+    total = total_result.scalar() or 0
+
+    # Fetch Data
+    query = query.order_by(desc(Order.analyzed_at)).offset(offset).limit(limit)
+    result = await db.execute(query)
+    orders = result.scalars().all()
+    
+    return {
+        "orders": orders,
+        "total": total,
+        "page": page,
+        "pages": (total + limit - 1) // limit
+    }
 
 @router.post("/seed")
 async def trigger_seed(

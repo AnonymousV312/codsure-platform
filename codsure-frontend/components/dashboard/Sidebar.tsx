@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { LayoutDashboard, ShoppingCart, Settings, ShieldCheck, LogOut } from "lucide-react"
+import { LayoutDashboard, ShoppingCart, Settings, ShieldCheck, LogOut, ShoppingBag } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function Sidebar() {
@@ -16,6 +16,7 @@ export function Sidebar() {
                     <nav className="grid items-start px-4 text-sm font-medium">
                         <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" />
                         <NavItem href="/dashboard/orders" icon={ShoppingCart} label="Orders" />
+                        <NavItem href="/dashboard/connect-store" icon={ShoppingBag} label="Connect Store" />
                         <NavItem href="/dashboard/settings" icon={Settings} label="Settings" />
                     </nav>
                 </div>

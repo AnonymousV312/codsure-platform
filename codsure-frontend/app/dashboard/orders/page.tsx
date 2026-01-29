@@ -1,74 +1,130 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+"use client"
+
+import { useState } from "react"
+import { useMerchantOrders, useShopifySync } from "@/lib/hooks/useMerchant"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Search, Download, Filter, ShieldCheck } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { RefreshCw, Download } from "lucide-react"
 
 export default function OrdersPage() {
+    const [page, setPage] = useState(1)
+    const { data, isLoading, mutate } = useMerchantOrders(page)
+    const { triggerSync } = useShopifySync()
+    const [syncing, setSyncing] = useState(false)
+
+    const handleSync = async () => {
+        setSyncing(true)
+        try {
+            await triggerSync()
+            mutate() // Refresh list
+            alert("Sync started/completed successfully")
+        } catch (e) {
+            alert("Sync failed. Ensure store is connected.")
+        } finally {
+            setSyncing(false)
+        }
+    }
+
+    if (isLoading) return <div>Loading Orders...</div>
+
     return (
         <div className="flex flex-col gap-8">
             <div className="flex items-center justify-between">
                 <h1 className="text-lg font-semibold md:text-2xl">Orders</h1>
-                <Button>Export CSV</Button>
+                <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={handleSync} disabled={syncing}>
+                        <RefreshCw className={`mr-2 h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+                        {syncing ? "Syncing..." : "Sync from Shopify"}
+                    </Button>
+                    <Button variant="outline" size="sm">
+                        <Download className="mr-2 h-4 w-4" />
+                        Export
+                    </Button>
+                </div>
             </div>
+
             <Card>
                 <CardHeader>
-                    <CardTitle>Recent Orders</CardTitle>
-                    <CardDescription>A list of all orders analyzed by CODSure.</CardDescription>
+                    <CardTitle>All Orders</CardTitle>
+                    <CardDescription>View and manage your store orders.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="relative w-full md:w-1/3">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                            <Input
-                                className="pl-8"
-                                placeholder="Filter by Order ID or Score..."
-                                type="search"
-                            />
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Order</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Customer</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Payment</TableHead>
+                                <TableHead>Risk</TableHead>
+                                <TableHead className="text-right">Amount</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {data?.orders?.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={7} className="text-center h-24">
+                                        No orders found. Try syncing from Shopify.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                            {data?.orders?.map((order: any) => (
+                                <TableRow key={order.id}>
+                                    <TableCell className="font-medium">{order.order_number}</TableCell>
+                                    <TableCell>{new Date(order.analyzed_at).toLocaleDateString()}</TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-col">
+                                            <span>{order.customer_name || "Guest"}</span>
+                                            <span className="text-xs text-gray-500">{order.customer_email}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="outline">{order.status}</Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-col">
+                                            <span className="text-xs font-semibold">{order.payment_method}</span>
+                                            {order.is_cod && <span className="text-[10px] text-blue-600">COD</span>}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className={`font-bold ${order.risk_score > 70 ? "text-red-500" :
+                                                order.risk_score > 30 ? "text-yellow-500" : "text-green-500"
+                                            }`}>
+                                            {order.risk_score}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {order.currency} {order.total_price}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+
+                    <div className="mt-4 flex justify-between items-center text-sm text-gray-500">
+                        <div>Page {data?.page} of {data?.pages || 1}</div>
+                        <div className="flex gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={page <= 1}
+                                onClick={() => setPage(p => p - 1)}
+                            >
+                                Previous
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={page >= (data?.pages || 1)}
+                                onClick={() => setPage(p => p + 1)}
+                            >
+                                Next
+                            </Button>
                         </div>
-                    </div>
-                    <div className="rounded-md border">
-                        <table className="w-full caption-bottom text-sm text-left">
-                            <thead className="[&_tr]:border-b">
-                                <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Order ID</th>
-                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Customer</th>
-                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">City</th>
-                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Amount</th>
-                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Cust. Trust</th>
-                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Risk Score</th>
-                                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Decision</th>
-                                </tr>
-                            </thead>
-                            <tbody className="[&_tr:last-child]:border-0">
-                                {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-                                    <tr key={i} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                                        <td className="p-4 align-middle font-medium">#ORD-{2000 + i}</td>
-                                        <td className="p-4 align-middle">0300-123456{i}</td>
-                                        <td className="p-4 align-middle">{i % 2 === 0 ? "Lahore" : "Karachi"}</td>
-                                        <td className="p-4 align-middle">PKR {1000 * i + 500}</td>
-                                        <td className="p-4 align-middle">
-                                            <div className="flex items-center gap-1">
-                                                <span className="font-semibold">{50 + (i * 5)}</span>
-                                                {50 + (i * 5) > 70 && <ShieldCheck className="h-3 w-3 text-green-600" />}
-                                            </div>
-                                        </td>
-                                        <td className="p-4 align-middle">
-                                            <div className="flex items-center gap-2">
-                                                <span className="font-bold">{i * 10}</span>
-                                                <div className="h-2 w-16 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div className={`h-full ${i * 10 > 70 ? 'bg-red-500' : i * 10 > 30 ? 'bg-yellow-500' : 'bg-green-500'}`} style={{ width: `${i * 10}%` }}></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="p-4 align-middle">
-                                            <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${i * 10 > 70 ? 'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80' : 'border-transparent bg-green-500 text-white hover:bg-green-600'}`}>
-                                                {i * 10 > 70 ? "BLOCK" : i * 10 > 30 ? "PARTIAL" : "COD OK"}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
                     </div>
                 </CardContent>
             </Card>
