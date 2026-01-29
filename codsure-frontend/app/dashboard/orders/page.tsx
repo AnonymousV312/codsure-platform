@@ -97,10 +97,17 @@ export default function OrdersPage() {
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <div className={`font-bold ${order.risk_score > 70 ? "text-red-500" :
-                                            order.risk_score > 30 ? "text-yellow-500" : "text-green-500"
-                                            }`}>
-                                            {order.risk_score}
+                                        <div className="flex flex-col">
+                                            <div className={`font-bold ${order.risk_score > 70 ? "text-red-500" :
+                                                order.risk_score > 30 ? "text-yellow-500" : "text-green-500"
+                                                }`}>
+                                                {order.risk_score}
+                                            </div>
+                                            {order.risk_reasons?.ai_score !== undefined && (
+                                                <span className="text-[10px] text-muted-foreground">
+                                                    AI: {order.risk_reasons.ai_score}%
+                                                </span>
+                                            )}
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right">

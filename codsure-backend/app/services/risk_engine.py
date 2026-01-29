@@ -21,10 +21,28 @@ class RiskEngine:
             if RiskEngine._check_condition(rule.condition, order):
                 triggered_rules.append(rule.name)
                 final_decision = rule.decision
-                break # First match wins strategy? Or accumulate? 
-                      # Requirement says "First matching rule applies"
+                break 
+
+        # 3. AI Augmentation (Consult ML Service)
+        from app.services.ml_service import MLService
+        # Calculate a basic risk score from rules (e.g. if BLOCK, score is high)
+        rule_score = 100 if final_decision == "BLOCK" else 0 
         
-        # 3. Create Decision Record
+        # Predict probability of success (0.0 - 1.0)
+        ai_prob = MLService.predict_risk({
+            "total_price": order.total_price,
+            "customer_city": order.customer_city
+        }, current_risk_score=rule_score)
+        
+        ai_score_percent = int(ai_prob * 100)
+        triggered_rules.append(f"AI_Confidence: {ai_score_percent}%")
+        
+        # Safety: If AI is very confident it will fail (< 30%), flag it
+        if ai_prob < 0.3 and final_decision == "COD_ALLOWED":
+            final_decision = "PARTIAL_ADVANCE"
+            triggered_rules.append("AI_Override_High_Risk")
+
+        # 4. Create Decision Record
         decision_record = RiskDecision(
             order_id=order.id,
             decision=final_decision,
@@ -32,10 +50,9 @@ class RiskEngine:
         )
         db.add(decision_record)
         
-        # 4. Update Order
+        # 5. Update Order
         order.risk_decision = final_decision
-        order.risk_reasons = {"rules": triggered_rules}
-        # order.risk_score could be calculated too, but keeping simple
+        order.risk_reasons = {"rules": triggered_rules, "ai_score": ai_score_percent}
         
         await db.commit()
         return final_decision
@@ -60,9 +77,22 @@ class RiskEngine:
                 final_decision = rule.decision
                 break 
         
+        # 3. AI Augmentation
+        from app.services.ml_service import MLService
+        rule_score = 100 if final_decision == "BLOCK" else 0
+        ai_prob = MLService.predict_risk(cart_data, current_risk_score=rule_score)
+        ai_score_percent = int(ai_prob * 100)
+        
+        triggered_rules.append(f"AI_Confidence: {ai_score_percent}%")
+        
+        if ai_prob < 0.3 and final_decision == "COD_ALLOWED":
+             final_decision = "PARTIAL_ADVANCE"
+             triggered_rules.append("AI_Override_High_Risk")
+
         return {
             "decision": final_decision,
-            "reasons": triggered_rules
+            "reasons": triggered_rules,
+            "ai_score": ai_score_percent
         }
 
     @staticmethod
