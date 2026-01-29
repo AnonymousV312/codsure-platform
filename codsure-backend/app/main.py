@@ -11,7 +11,8 @@ origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    # allow_origins=origins, # Invalid with allow_credentials=True
+    allow_origin_regex="https?://.*", # Allow all https/http origins properly
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
