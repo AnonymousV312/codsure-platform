@@ -25,7 +25,7 @@ router = APIRouter()
 # Shopify API Config - In production these should be strictly env vars
 SHOPIFY_API_KEY = os.getenv("SHOPIFY_API_KEY", "your-api-key")
 SHOPIFY_API_SECRET = os.getenv("SHOPIFY_API_SECRET", "your-api-secret")
-SCOPES = "read_orders,read_customers,read_fulfillments"
+SCOPES = "read_orders,write_orders,read_customers,read_fulfillments"
 REDIRECT_URI = f"{settings.SERVER_HOST}/api/v1/shopify/callback"
 
 import os
