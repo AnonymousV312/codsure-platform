@@ -69,17 +69,17 @@ export default function Home() {
                             <p className="mt-4 text-muted-foreground">Every merchant knows the pain. We built the cure.</p>
                         </div>
                         <div className="grid gap-8 md:grid-cols-3">
-                            <div className="rounded-xl border bg-white p-8 shadow-sm transition-shadow hover:shadow-md dark:bg-black">
+                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition-shadow hover:shadow-md">
                                 <Ban className="mb-4 h-10 w-10 text-red-500" />
                                 <h3 className="text-xl font-bold">Fake Orders</h3>
-                                <p className="mt-2 text-sm text-muted-foreground">Competitors and pranksters placing orders that never get delivered, draining your marketing budget.</p>
+                                <p className="mt-2 text-sm text-gray-600">Competitors and pranksters placing orders that never get delivered, draining your marketing budget.</p>
                             </div>
-                            <div className="rounded-xl border bg-white p-8 shadow-sm transition-shadow hover:shadow-md dark:bg-black">
+                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition-shadow hover:shadow-md">
                                 <TrendingUp className="mb-4 h-10 w-10 text-amber-500" />
                                 <h3 className="text-xl font-bold">High RTO Rates</h3>
-                                <p className="mt-2 text-sm text-muted-foreground">Parcels travelled across the country only to be refused at the doorstep. Double shipping costs.</p>
+                                <p className="mt-2 text-sm text-gray-600">Parcels travelled across the country only to be refused at the doorstep. Double shipping costs.</p>
                             </div>
-                            <div className="rounded-xl border bg-white p-8 shadow-sm transition-shadow hover:shadow-md dark:bg-black">
+                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition-shadow hover:shadow-md">
                                 <DollarSign className="mb-4 h-10 w-10 text-green-500" />
                                 <h3 className="text-xl font-bold">Cashflow Gaps</h3>
                                 <p className="mt-2 text-sm text-muted-foreground">Money stuck with courier companies for weeks while you need to restock inventory.</p>
