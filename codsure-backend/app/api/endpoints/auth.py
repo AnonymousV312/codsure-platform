@@ -59,9 +59,21 @@ async def create_user_signup(
         email=user_in.email,
         hashed_password=security.get_password_hash(user_in.password),
         full_name=user_in.full_name,
-        is_active=True, # Auto-activate for now
+        phone_number=user_in.phone_number,
+        country_code=user_in.country_code,
+        is_active=True,
     )
     db.add(user)
+    await db.flush() # Flush to get user.id for foreign key
+
+    from app.models.store import Store
+    store = Store(
+        name=user_in.store_name,
+        platform=user_in.platform,
+        domain=f"{user_in.store_name.lower().replace(' ', '-')}.placeholder.com", # Placeholder domain logic
+        owner_id=user.id
+    )
+    db.add(store)
     await db.commit()
     await db.refresh(user)
     return user

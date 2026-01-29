@@ -9,6 +9,10 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    phone_number: Optional[str] = None
+    country_code: Optional[str] = None
+    store_name: str
+    platform: Optional[str] = "shopify"
 
 class UserUpdate(UserBase):
     password: Optional[str] = None

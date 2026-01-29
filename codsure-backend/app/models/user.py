@@ -13,6 +13,8 @@ class User(Base):
     full_name: Mapped[str | None] = mapped_column(String, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
+    phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    country_code: Mapped[str | None] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     stores: Mapped[list["Store"]] = relationship(back_populates="owner")

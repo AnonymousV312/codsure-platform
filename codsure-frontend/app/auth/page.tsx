@@ -8,6 +8,7 @@ import { ShieldCheck } from "lucide-react"
 import { useAuth } from "@/components/providers/AuthContext"
 import api from "@/lib/api"
 import { useRouter } from "next/navigation"
+import { countries } from "@/lib/countries"
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true)
@@ -17,6 +18,12 @@ export default function AuthPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [fullName, setFullName] = useState("")
+
+    // New Fields
+    const [countryCode, setCountryCode] = useState("+92")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [storeName, setStoreName] = useState("")
+
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
 
@@ -38,11 +45,21 @@ export default function AuthPage() {
 
                 login(response.data.access_token)
             } else {
+                if (!storeName) {
+                    setError("Store name is required")
+                    setLoading(false)
+                    return
+                }
+
                 // Signup Flow
                 await api.post("/auth/signup", {
                     email,
                     password,
                     full_name: fullName,
+                    phone_number: phoneNumber,
+                    country_code: countryCode,
+                    store_name: storeName,
+                    platform: "shopify"
                 })
 
                 // Auto-login after signup
@@ -110,16 +127,58 @@ export default function AuthPage() {
                             />
                         </div>
                         {!isLogin && (
-                            <div className="space-y-2">
-                                <label htmlFor="fullname" className="text-sm font-medium leading-none">Full Name</label>
-                                <Input
-                                    id="fullname"
-                                    type="text"
-                                    placeholder="John Doe"
-                                    value={fullName}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                />
-                            </div>
+                            <>
+                                <div className="space-y-2">
+                                    <label htmlFor="fullname" className="text-sm font-medium leading-none">Full Name</label>
+                                    <Input
+                                        id="fullname"
+                                        type="text"
+                                        placeholder="John Doe"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <div className="space-y-2 col-span-1">
+                                        <label htmlFor="country" className="text-sm font-medium leading-none">Code</label>
+                                        <select
+                                            id="country"
+                                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                            value={countryCode}
+                                            onChange={(e) => setCountryCode(e.target.value)}
+                                        >
+                                            {countries.map((c) => (
+                                                <option key={c.code} value={c.dial_code}>
+                                                    {c.code} ({c.dial_code})
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2 col-span-2">
+                                        <label htmlFor="phone" className="text-sm font-medium leading-none">Phone</label>
+                                        <Input
+                                            id="phone"
+                                            type="tel"
+                                            placeholder="300 1234567"
+                                            value={phoneNumber}
+                                            onChange={(e) => setPhoneNumber(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label htmlFor="storename" className="text-sm font-medium leading-none">Store Name</label>
+                                    <Input
+                                        id="storename"
+                                        type="text"
+                                        placeholder="My Awesome Store"
+                                        value={storeName}
+                                        onChange={(e) => setStoreName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </>
                         )}
                         <Button className="w-full" type="submit" disabled={loading}>
                             {loading ? "Processing..." : (isLogin ? "Sign In" : "Sign Up")}
@@ -130,10 +189,11 @@ export default function AuthPage() {
                     <div className="text-sm text-center text-gray-500">
                         {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
                         <button
+                            type="button"
                             onClick={() => setIsLogin(!isLogin)}
                             className="text-primary hover:underline font-medium"
                         >
-                            {isLogin ? "Sign up" : "Login"}
+                            {isLogin ? "Create account" : "Sign in"}
                         </button>
                     </div>
                 </CardFooter>
