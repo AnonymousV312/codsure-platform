@@ -4,18 +4,67 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
 import { ShieldCheck } from "lucide-react"
+import { useAuth } from "@/components/providers/AuthContext"
+import api from "@/lib/api"
 import { useRouter } from "next/navigation"
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true)
+    const { login } = useAuth()
     const router = useRouter()
 
-    const handleAuth = (e: React.FormEvent) => {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [fullName, setFullName] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault()
-        // Mock Auth -> Redirect to dashboard
-        router.push("/dashboard")
+        setError("")
+        setLoading(true)
+
+        try {
+            if (isLogin) {
+                // Login Flow
+                const params = new URLSearchParams()
+                params.append('username', email)
+                params.append('password', password)
+
+                const response = await api.post("/auth/login/access-token", params, {
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+
+                login(response.data.access_token)
+            } else {
+                // Signup Flow
+                await api.post("/auth/signup", {
+                    email,
+                    password,
+                    full_name: fullName,
+                })
+
+                // Auto-login after signup
+                const params = new URLSearchParams()
+                params.append('username', email)
+                params.append('password', password)
+
+                const response = await api.post("/auth/login/access-token", params, {
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+                login(response.data.access_token)
+            }
+        } catch (err: any) {
+            console.error(err)
+            if (err.response) {
+                setError(err.response.data.detail || "Authentication failed")
+            } else {
+                setError("Network error. Is backend running?")
+            }
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -34,22 +83,46 @@ export default function AuthPage() {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleAuth} className="space-y-4">
+                        {error && (
+                            <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md border border-red-200">
+                                {error}
+                            </div>
+                        )}
                         <div className="space-y-2">
-                            <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
-                            <Input id="email" type="email" placeholder="m@example.com" required />
+                            <label htmlFor="email" className="text-sm font-medium leading-none">Email</label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="m@example.com"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </div>
                         <div className="space-y-2">
-                            <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
-                            <Input id="password" type="password" required />
+                            <label htmlFor="password" className="text-sm font-medium leading-none">Password</label>
+                            <Input
+                                id="password"
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </div>
                         {!isLogin && (
                             <div className="space-y-2">
-                                <label htmlFor="store-name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Store Name</label>
-                                <Input id="store-name" type="text" placeholder="My Awesome Store" required />
+                                <label htmlFor="fullname" className="text-sm font-medium leading-none">Full Name</label>
+                                <Input
+                                    id="fullname"
+                                    type="text"
+                                    placeholder="John Doe"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                />
                             </div>
                         )}
-                        <Button className="w-full" type="submit">
-                            {isLogin ? "Sign In" : "Sign Up"}
+                        <Button className="w-full" type="submit" disabled={loading}>
+                            {loading ? "Processing..." : (isLogin ? "Sign In" : "Sign Up")}
                         </Button>
                     </form>
                 </CardContent>
