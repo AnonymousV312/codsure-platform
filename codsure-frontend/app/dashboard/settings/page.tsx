@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
 import { useState } from "react"
 import api from "@/lib/api"
 import { useAuth } from "@/components/providers/AuthContext"
@@ -52,6 +53,32 @@ export default function SettingsPage() {
                         </div>
                         <Button>Save Changes</Button>
                     </form>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Checkout Enforcement</CardTitle>
+                    <CardDescription>Automatically restrict payment methods based on risk decisions.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                                <span className="text-sm font-medium">Enable Active Enforcement</span>
+                                <p className="text-xs text-muted-foreground">If risky, COD will be hidden or restricted at checkout.</p>
+                            </div>
+                            <Switch defaultChecked={false} />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium">Required Advance Percentage</label>
+                            <div className="flex gap-2">
+                                <Input type="number" defaultValue="20" className="w-24" />
+                                <span className="flex items-center text-sm text-muted-foreground">%</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">The % of order value to collect via card/bank for risky orders.</p>
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
 

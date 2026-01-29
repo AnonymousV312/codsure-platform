@@ -41,28 +41,61 @@ class RiskEngine:
         return final_decision
 
     @staticmethod
-    def _check_condition(condition: dict, order: Order) -> bool:
+    async def evaluate_cart(db: AsyncSession, cart_data: dict) -> dict:
         """
-        Check if order matches condition.
-        Supported fields: total_price, customer_phone (new vs returning logic needed), city
+        Evaluate a cart (pre-order) against rules. 
+        Returns simplified decision object for Checkout API.
+        """
+        # 1. Fetch active rules
+        result = await db.execute(select(RiskRule).where(RiskRule.is_active == True).order_by(RiskRule.priority.asc()))
+        rules = result.scalars().all()
+        
+        triggered_rules = []
+        final_decision = "COD_ALLOWED"
+        
+        # 2. Iterate Rules
+        for rule in rules:
+            if RiskEngine._check_condition(rule.condition, cart_data):
+                triggered_rules.append(rule.name)
+                final_decision = rule.decision
+                break 
+        
+        return {
+            "decision": final_decision,
+            "reasons": triggered_rules
+        }
+
+    @staticmethod
+    def _check_condition(condition: dict, data: any) -> bool:
+        """
+        Check if data matches condition. Data can be Order object or Cart dict.
         """
         field = condition.get("field")
         op = condition.get("op")
         value = condition.get("value")
         
-        order_value = None
+        data_value = None
         
+        # Support both object attribute and dict access
+        def get_val(obj, key):
+            if isinstance(obj, dict):
+                return obj.get(key)
+            return getattr(obj, key, None)
+
         if field == "total_price":
-            order_value = order.total_price
+            data_value = get_val(data, "total_price")
         elif field == "city":
-            order_value = order.customer_city
+            data_value = get_val(data, "customer_city") or get_val(data, "city")
         
         # Operator check
-        if op == "gt":
-            return float(order_value or 0) > float(value)
-        elif op == "lt":
-            return float(order_value or 0) < float(value)
-        elif op == "eq":
-            return str(order_value).lower() == str(value).lower()
+        try:
+            if op == "gt":
+                return float(data_value or 0) > float(value)
+            elif op == "lt":
+                return float(data_value or 0) < float(value)
+            elif op == "eq":
+                return str(data_value).lower() == str(value).lower()
+        except:
+            return False
             
         return False

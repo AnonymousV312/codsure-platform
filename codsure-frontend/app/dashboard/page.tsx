@@ -7,6 +7,8 @@ import { Overview } from "@/components/dashboard/Overview"
 import { RecentSales } from "@/components/dashboard/RecentSales"
 import { Button } from "@/components/ui/button"
 import api from "@/lib/api"
+import { CalendarDateRangePicker } from "@/components/dashboard/DateRangePicker"
+import DashboardLoading from "@/app/dashboard/loading"
 import { useState } from "react"
 
 export default function DashboardPage() {
@@ -27,7 +29,7 @@ export default function DashboardPage() {
     }
 
     if (statsLoading) {
-        return <div className="flex h-screen items-center justify-center">Loading Dashboard...</div>
+        return <DashboardLoading />
     }
 
     // Default to zero if stats failed to load or are empty
@@ -37,10 +39,13 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-8">
             <div className="flex items-center justify-between">
                 <h1 className="text-lg font-semibold md:text-2xl">Overview</h1>
-                <Button variant="outline" size="sm" onClick={handleSeed} disabled={seeding}>
-                    <RefreshCcw className={`mr-2 h-4 w-4 ${seeding ? 'animate-spin' : ''}`} />
-                    {seeding ? 'Seeding...' : 'Reset/Seed Data'}
-                </Button>
+                <div className="flex items-center gap-2">
+                    <CalendarDateRangePicker />
+                    <Button variant="outline" size="sm" onClick={handleSeed} disabled={seeding}>
+                        <RefreshCcw className={`mr-2 h-4 w-4 ${seeding ? 'animate-spin' : ''}`} />
+                        {seeding ? 'Seeding...' : 'Reset Data'}
+                    </Button>
+                </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
