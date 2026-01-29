@@ -10,8 +10,8 @@ export function MobileSidebar() {
     const [open, setOpen] = useState(false)
 
     return (
-        <div className="lg:hidden">
-            <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
+        <div className="lg:hidden mr-2">
+            <Button variant="outline" size="icon" onClick={() => setOpen(true)} className="bg-white border-gray-300 text-gray-700">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle Menu</span>
             </Button>
