@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 name = "CODSure Risk Intelligence"
-client_id = "SHOPIFY_CLIENT_ID"
+client_id = "d969410a0333f8036c63ec547f411b26"
 application_url = "https://codsure.pk"
 embedded = true
 
