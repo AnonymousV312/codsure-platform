@@ -149,7 +149,7 @@ async def shopify_callback(
     await db.commit()
     
     # Redirect back to frontend dashboard
-    frontend_url = f"{settings.SERVER_HOST.replace(':8000', ':3000')}/dashboard?connected=true"
+    frontend_url = f"{settings.FRONTEND_URL}/dashboard?connected=true"
     return RedirectResponse(url=frontend_url)
 
 @router.post("/sync")

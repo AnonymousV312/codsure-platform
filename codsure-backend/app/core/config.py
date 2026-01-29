@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "CODSure"
     API_V1_STR: str = "/api/v1"
     SERVER_HOST: str = "http://localhost:8000"
+    FRONTEND_URL: str = "http://localhost:3000"
     
     POSTGRES_USER: str = "postgres"
     POSTGRES_PASSWORD: str = "postgres"
