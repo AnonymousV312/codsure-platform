@@ -42,7 +42,7 @@ export function SiteFooter() {
                     </div>
                 </div>
                 <div className="mt-12 border-t pt-8 text-center text-xs text-muted-foreground">
-                    © {new Date().getFullYear()} CODSure Inc. All rights reserved.
+                    © {new Date().getFullYear()} CODSure Inc. All rights reserved. <span className="opacity-50 ml-2 text-[10px]">v1.1.0</span>
                 </div>
             </div>
         </footer>

@@ -40,7 +40,9 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
                 <h1 className="text-lg font-semibold md:text-2xl">Overview</h1>
                 <div className="flex items-center gap-2">
-                    <CalendarDateRangePicker />
+                    <div className="hidden md:block">
+                        <CalendarDateRangePicker />
+                    </div>
                     <Button variant="outline" size="sm" onClick={handleSeed} disabled={seeding}>
                         <RefreshCcw className={`mr-2 h-4 w-4 ${seeding ? 'animate-spin' : ''}`} />
                         {seeding ? 'Seeding...' : 'Reset Data'}
