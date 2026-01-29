@@ -8,7 +8,10 @@ from app.models.feature_store import CustomerFeatures
 from app.services.risk_engine import RiskEngine
 
 MODEL_PATH = "ml_models/risk_model_v1.joblib"
-os.makedirs("ml_models", exist_ok=True)
+try:
+    os.makedirs("ml_models", exist_ok=True)
+except Exception as e:
+    print(f"Warning: Could not create ml_models directory: {e}")
 
 class MLService:
     @staticmethod
