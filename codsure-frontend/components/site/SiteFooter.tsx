@@ -26,8 +26,8 @@ export function SiteFooter() {
                     <div>
                         <h3 className="text-sm font-semibold">Company</h3>
                         <ul className="mt-4 space-y-2 text-xs text-muted-foreground">
-                            <li><Link href="#">About</Link></li>
-                            <li><Link href="#">Contact</Link></li>
+                            <li><Link href="/about">About</Link></li>
+                            <li><Link href="/about">Contact</Link></li>
                             <li><Link href="#">Privacy Policy</Link></li>
                             <li><Link href="#">Terms of Service</Link></li>
                         </ul>

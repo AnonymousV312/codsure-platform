@@ -19,7 +19,7 @@ export function SiteHeader() {
                     <Link className="text-sm font-medium hover:text-primary transition-colors" href="/pricing">
                         Pricing
                     </Link>
-                    <Link className="text-sm font-medium hover:text-primary transition-colors" href="#">
+                    <Link className="text-sm font-medium hover:text-primary transition-colors" href="/about">
                         About
                     </Link>
                     <div className="flex items-center gap-2 ml-2">
