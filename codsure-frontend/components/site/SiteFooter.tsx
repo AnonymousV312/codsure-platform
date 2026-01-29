@@ -16,33 +16,33 @@ export function SiteFooter() {
                         </p>
                     </div>
                     <div>
-                        <h3 className="text-sm font-semibold">Product</h3>
-                        <ul className="mt-4 space-y-2 text-xs text-muted-foreground">
-                            <li><Link href="/how-it-works">How it Works</Link></li>
-                            <li><Link href="/pricing">Pricing</Link></li>
-                            <li><Link href="#">Integration</Link></li>
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50">Product</h3>
+                        <ul className="mt-4 space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+                            <li><Link href="/how-it-works" className="hover:text-primary">How it Works</Link></li>
+                            <li><Link href="/pricing" className="hover:text-primary">Pricing</Link></li>
+                            <li><Link href="#" className="hover:text-primary">Integration</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="text-sm font-semibold">Company</h3>
-                        <ul className="mt-4 space-y-2 text-xs text-muted-foreground">
-                            <li><Link href="/about">About</Link></li>
-                            <li><Link href="/about">Contact</Link></li>
-                            <li><Link href="#">Privacy Policy</Link></li>
-                            <li><Link href="#">Terms of Service</Link></li>
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50">Company</h3>
+                        <ul className="mt-4 space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+                            <li><Link href="/about" className="hover:text-primary">About</Link></li>
+                            <li><Link href="/about" className="hover:text-primary">Contact</Link></li>
+                            <li><Link href="#" className="hover:text-primary">Privacy Policy</Link></li>
+                            <li><Link href="#" className="hover:text-primary">Terms of Service</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="text-sm font-semibold">Connect</h3>
-                        <ul className="mt-4 space-y-2 text-xs text-muted-foreground">
-                            <li><Link href="#">Twitter</Link></li>
-                            <li><Link href="#">LinkedIn</Link></li>
-                            <li><Link href="#">GitHub</Link></li>
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50">Connect</h3>
+                        <ul className="mt-4 space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+                            <li><Link href="#" className="hover:text-primary">Twitter</Link></li>
+                            <li><Link href="#" className="hover:text-primary">LinkedIn</Link></li>
+                            <li><Link href="#" className="hover:text-primary">GitHub</Link></li>
                         </ul>
                     </div>
                 </div>
-                <div className="mt-12 border-t pt-8 text-center text-xs text-muted-foreground">
-                    © {new Date().getFullYear()} CODSure Inc. All rights reserved. <span className="opacity-50 ml-2 text-[10px]">v1.1.0</span>
+                <div className="mt-12 border-t border-gray-200 pt-8 text-center text-xs text-slate-500 font-medium">
+                    © {new Date().getFullYear()} CODSure Inc. All rights reserved. <span className="opacity-50 ml-2 text-[10px]">v1.2.0</span>
                 </div>
             </div>
         </footer>

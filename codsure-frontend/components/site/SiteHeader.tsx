@@ -38,11 +38,9 @@ export function SiteHeader() {
                     </div>
                 </nav>
 
-                {/* Mobile CTA (only show Get Started if space allows, otherwise relying on menu) */}
-                <div className="flex md:hidden items-center gap-2">
-                    <Link href="/auth?signup=true">
-                        <Button size="sm" className="h-8 text-xs px-3">Get Started</Button>
-                    </Link>
+                {/* Mobile CTA: Hidden to reduce congestion. Access via Menu. */}
+                <div className="md:hidden">
+                    {/* Empty placeholder if needed or just rely on flex gap */}
                 </div>
             </div>
         </header>
