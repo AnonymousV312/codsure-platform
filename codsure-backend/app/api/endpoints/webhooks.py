@@ -111,6 +111,11 @@ async def handle_shopify_order(
             raw_data=payload
         )
         db.add(new_order)
+        # Flush to get ID for Risk Engine
+        await db.flush()
+        
+        from app.services.risk_engine import RiskEngine
+        await RiskEngine.evaluate_order(db, new_order)
     
     await db.commit()
     return {"status": "success"}

@@ -17,6 +17,7 @@ export function Sidebar() {
                         <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" />
                         <NavItem href="/dashboard/orders" icon={ShoppingCart} label="Orders" />
                         <NavItem href="/dashboard/connect-store" icon={ShoppingBag} label="Connect Store" />
+                        <NavItem href="/admin/rules" icon={ShieldCheck} label="Risk Rules" />
                         <NavItem href="/dashboard/settings" icon={Settings} label="Settings" />
                     </nav>
                 </div>

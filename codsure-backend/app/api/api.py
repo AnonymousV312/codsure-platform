@@ -9,3 +9,4 @@ api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboar
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
 api_router.include_router(shopify.router, prefix="/shopify", tags=["shopify"])
 api_router.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
+api_router.include_router(risk.router, prefix="/rules", tags=["rules"])

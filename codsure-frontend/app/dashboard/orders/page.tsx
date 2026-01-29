@@ -82,7 +82,13 @@ export default function OrdersPage() {
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant="outline">{order.status}</Badge>
+                                        <Badge variant={
+                                            order.status === 'BLOCK' ? 'destructive' :
+                                                (order.status === 'PARTIAL_ADVANCE' ? 'secondary' :
+                                                    (order.status === 'FULL_ADVANCE' ? 'destructive' : 'outline'))
+                                        }>
+                                            {order.status.replace("_", " ")}
+                                        </Badge>
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex flex-col">
@@ -92,7 +98,7 @@ export default function OrdersPage() {
                                     </TableCell>
                                     <TableCell>
                                         <div className={`font-bold ${order.risk_score > 70 ? "text-red-500" :
-                                                order.risk_score > 30 ? "text-yellow-500" : "text-green-500"
+                                            order.risk_score > 30 ? "text-yellow-500" : "text-green-500"
                                             }`}>
                                             {order.risk_score}
                                         </div>

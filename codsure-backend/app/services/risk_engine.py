@@ -1,64 +1,68 @@
-from typing import Dict, Any
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc
+from app.models.order import Order
+from app.models.risk import RiskRule, RiskDecision
 
 class RiskEngine:
-    def __init__(self):
-        # Mock Data for V1
-        self.high_risk_cities = ["Karachi", "Lahore"] # Example, in reality specific areas
-        self.city_risk_index = {"Karachi": 30, "Lahore": 20, "Islamabad": 5}
-    
-    def calculate_risk(self, order_data: Dict[str, Any], customer_history: Dict[str, Any], store_trust_score: float = 100.0) -> Dict[str, Any]:
+    @staticmethod
+    async def evaluate_order(db: AsyncSession, order: Order) -> str:
         """
-        Deterministic Rule-Based Risk Engine V2 (with Trust Scores).
+        Evaluate an order against active risk rules.
         """
-        score = 0
-        reasons = []
+        # 1. Fetch active rules ordered by priority (Ascending: 1 is top)
+        result = await db.execute(select(RiskRule).where(RiskRule.is_active == True).order_by(RiskRule.priority.asc()))
+        rules = result.scalars().all()
         
-        # 1. Customer Trust Score (The most potent signal)
-        customer_trust = customer_history.get("trust_score", 50.0)
+        triggered_rules = []
+        final_decision = "COD_ALLOWED" # Default safe
         
-        # If High Trust, give massive discount on risk
-        if customer_trust > 80:
-            score -= 40
-            reasons.append("High Trust Customer")
-        elif customer_trust < 30:
-            score += 50
-            reasons.append("Low Trust Customer")
+        # 2. Iterate Rules
+        for rule in rules:
+            if RiskEngine._check_condition(rule.condition, order):
+                triggered_rules.append(rule.name)
+                final_decision = rule.decision
+                break # First match wins strategy? Or accumulate? 
+                      # Requirement says "First matching rule applies"
+        
+        # 3. Create Decision Record
+        decision_record = RiskDecision(
+            order_id=order.id,
+            decision=final_decision,
+            reasons=triggered_rules
+        )
+        db.add(decision_record)
+        
+        # 4. Update Order
+        order.risk_decision = final_decision
+        order.risk_reasons = {"rules": triggered_rules}
+        # order.risk_score could be calculated too, but keeping simple
+        
+        await db.commit()
+        return final_decision
 
-        # 2. Historical Refusal Rate (Legacy check, kept for new customers with no score yet)
-        refusal_rate = customer_history.get("refusal_rate", 0)
-        if refusal_rate > 50 and customer_history.get("total_orders", 0) > 2:
-            score += 80
-            reasons.append("High historical refusal rate")
+    @staticmethod
+    def _check_condition(condition: dict, order: Order) -> bool:
+        """
+        Check if order matches condition.
+        Supported fields: total_price, customer_phone (new vs returning logic needed), city
+        """
+        field = condition.get("field")
+        op = condition.get("op")
+        value = condition.get("value")
+        
+        order_value = None
+        
+        if field == "total_price":
+            order_value = order.total_price
+        elif field == "city":
+            order_value = order.customer_city
+        
+        # Operator check
+        if op == "gt":
+            return float(order_value or 0) > float(value)
+        elif op == "lt":
+            return float(order_value or 0) < float(value)
+        elif op == "eq":
+            return str(order_value).lower() == str(value).lower()
             
-        # 3. City Risk
-        city = order_data.get("city", "Unknown")
-        city_risk = self.city_risk_index.get(city, 10) 
-        score += city_risk
-        if city_risk > 20:
-            reasons.append(f"High risk city: {city}")
-            
-        # 4. Store Trust Score (Fraud Seller Protection)
-        # If the seller themselves have low trust (selling fakes), we block COD to protect buyers
-        if store_trust_score < 40:
-            score += 100
-            reasons.append("Seller Trust Score Low (Potential Fraud)")
-        
-        # Clamp Score
-        score = max(0, min(score, 100))
-        
-        # Decision Logic
-        decision = "COD"
-        if score >= 80:
-            decision = "BLOCK"
-        elif score >= 50:
-            decision = "FULL_ADVANCE"
-        elif score >= 30:
-            decision = "PARTIAL_ADVANCE"
-        
-        return {
-            "risk_score": score,
-            "decision": decision,
-            "reasons": reasons
-        }
-
-risk_engine = RiskEngine()
+        return False

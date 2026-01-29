@@ -22,8 +22,12 @@ export function RecentSales() {
                     </div>
                     <div className="flex items-col space-y-1 text-right">
                         <div className="text-sm font-bold">₨ {order.amount.toLocaleString()}</div>
-                        <Badge variant={order.status === 'BLOCK' ? 'destructive' : 'outline'} className="ml-auto text-xs">
-                            {order.status}
+                        <Badge variant={
+                            order.status === 'BLOCK' ? 'destructive' :
+                                (order.status === 'PARTIAL_ADVANCE' ? 'secondary' :
+                                    (order.status === 'FULL_ADVANCE' ? 'destructive' : 'outline'))
+                        } className="ml-auto text-xs">
+                            {order.status.replace("_", " ")}
                         </Badge>
                     </div>
                 </div>

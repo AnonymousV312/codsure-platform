@@ -1,86 +1,62 @@
-from typing import Any, Optional
-from fastapi import APIRouter, Depends, HTTPException, Header
+from typing import Any
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-
 from app.api import deps
-from app.core.config import settings
 from app.db.session import get_db
+from app.models.risk import RiskRule, RiskDecision
 from app.models.user import User
-from app.models.store import Store
-from app.models.order import Order
-from app.schemas.risk import RiskAnalysisRequest, RiskAnalysisResponse
-from app.services.risk_engine import risk_engine
-from datetime import datetime
+from pydantic import BaseModel
 
 router = APIRouter()
 
-@router.post("/analyze", response_model=RiskAnalysisResponse)
-async def analyze_order(
-    *,
+class RuleCreate(BaseModel):
+    name: str
+    condition: dict
+    decision: str
+    priority: int = 10
+    is_active: bool = True
+
+@router.get("/rules")
+async def get_risk_rules(
     db: AsyncSession = Depends(get_db),
-    risk_in: RiskAnalysisRequest,
-    current_user: Optional[User] = Depends(deps.get_current_user_optional), # Use optional dependency
-    x_internal_key: Optional[str] = Header(None), # Internal service key
+    current_user: User = Depends(deps.get_current_active_user) # Simplify permissions
 ) -> Any:
     """
-    Analyze an order for COD risk.
+    List all risk rules.
     """
-    # 1. Verify Auth (User OR Internal Key)
-    is_internal = False
-    if x_internal_key and x_internal_key == settings.INTERNAL_API_KEY:
-        is_internal = True
-    elif current_user:
-        if not current_user.is_active:
-             raise HTTPException(status_code=400, detail="Inactive user")
-    else:
-        # Neither valid internal key nor valid user
-        raise HTTPException(status_code=401, detail="Not authenticated")
+    result = await db.execute(select(RiskRule).order_by(RiskRule.priority.asc()))
+    return result.scalars().all()
 
-    # 2. Verify Store ownership (or allowed access)
-    result = await db.execute(select(Store).where(Store.id == risk_in.store_id))
-    store = result.scalars().first()
-    if not store:
-        raise HTTPException(status_code=404, detail="Store not found")
-    
-    # If not internal, check user ownership
-    if not is_internal:
-        if store.owner_id != current_user.id and not current_user.is_superuser:
-            raise HTTPException(status_code=403, detail="Not authorized to access this store")
-
-    # 3. Get history (Mocked for now, in real app query Customers table)
-    customer_history = {
-        "refusal_rate": 10, # Mock
-        "total_orders": 5,   # Mock
-        "trust_score": 50.0 # Default
-    }
-    
-    # 4. Calculate Risk with Trust Score
-    risk_result = risk_engine.calculate_risk(
-        risk_in.model_dump(), 
-        customer_history,
-        store_trust_score=store.trust_score
-    )
-    
-    # 4. Save Order
-    order = Order(
-        external_order_id=risk_in.order_id, # This field name in schema is order_id, model is external_order_id
-        order_number=risk_in.order_id, # Reusing ID as number for simplified V1
-        customer_phone=risk_in.customer_phone,
-        customer_city=risk_in.city,
-        total_price=risk_in.total_price,
-        risk_score=risk_result["risk_score"],
-        risk_decision=risk_result["decision"],
-        risk_reasons=risk_result["reasons"],
-        store_id=store.id
-    )
-    db.add(order)
+@router.post("/rules")
+async def create_risk_rule(
+    rule_in: RuleCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    Create a new risk rule.
+    """
+    rule = RiskRule(**rule_in.dict())
+    db.add(rule)
     await db.commit()
-    await db.refresh(order)
+    return rule
+
+@router.post("/evaluate/{order_id}")
+async def evaluate_order_manually(
+    order_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    Manually re-evaluate an order (Dev tool).
+    """
+    from app.services.risk_engine import RiskEngine
+    from app.models.order import Order
     
-    return {
-        "risk_score": order.risk_score,
-        "decision": order.risk_decision,
-        "reasons": order.risk_reasons,
-        "timestamp": order.analyzed_at.isoformat()
-    }
+    order = await db.get(Order, order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+        
+    decision = await RiskEngine.evaluate_order(db, order)
+    return {"status": "success", "decision": decision}

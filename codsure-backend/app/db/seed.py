@@ -33,6 +33,29 @@ async def seed_data():
             db.add(admin)
             await db.commit()
             print("Created admin user: admin@codsure.io")
+        
+        # 1A.2 Seed Risk Rules
+        from app.models.risk import RiskRule
+        rules_data = [
+            {
+                "name": "High Value Order",
+                "condition": {"field": "total_price", "op": "gt", "value": 5000},
+                "decision": "PARTIAL_ADVANCE",
+                "priority": 1
+            },
+            {
+                "name": "Safe Low Value",
+                "condition": {"field": "total_price", "op": "lt", "value": 1000},
+                "decision": "COD_ALLOWED",
+                "priority": 10
+            }
+        ]
+        
+        for r in rules_data:
+            result = await db.execute(select(RiskRule).where(RiskRule.name == r["name"]))
+            if not result.scalars().first():
+                db.add(RiskRule(**r))
+        await db.commit()
 
         # 1B. Create Demo Merchant User if not exists
         result = await db.execute(select(User).where(User.email == "demo@codsure.io"))
