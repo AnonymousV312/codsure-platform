@@ -18,6 +18,8 @@ class Order(Base):
     customer_phone: Mapped[str] = mapped_column(String, index=True) # Hashed
     customer_city: Mapped[str | None] = mapped_column(String)
     total_price: Mapped[float] = mapped_column(Float)
+    status: Mapped[str] = mapped_column(String, default="pending") # pending, delivered, returned, cancelled
+    payment_method: Mapped[str] = mapped_column(String, default="COD") # COD, PREPAID
     
     risk_score: Mapped[int] = mapped_column(Integer) # 0-100
     risk_decision: Mapped[str] = mapped_column(String) # COD, PARTIAL_ADVANCE, FULL_ADVANCE, BLOCK
