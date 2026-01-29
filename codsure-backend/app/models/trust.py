@@ -8,12 +8,22 @@ class Customer(Base):
     __tablename__ = "customers"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    shopify_customer_id: Mapped[str | None] = mapped_column(String, unique=True, index=True)
     phone: Mapped[str] = mapped_column(String, unique=True, index=True)
+    email: Mapped[str | None] = mapped_column(String, index=True)
+    name: Mapped[str | None] = mapped_column(String)
     
-    trust_score: Mapped[float] = mapped_column(Float, default=50.0) # 0-100
+    # Scoring V2 (0.0 - 10.0)
+    cod_score: Mapped[float] = mapped_column(Float, default=5.0) 
+    trust_tier: Mapped[str] = mapped_column(String, default="NEUTRAL") # TRUSTED, NEUTRAL, SUSPICIOUS, BLOCKED
+    
+    # Stats
     total_orders: Mapped[int] = mapped_column(Integer, default=0)
     successful_orders: Mapped[int] = mapped_column(Integer, default=0)
     refused_orders: Mapped[int] = mapped_column(Integer, default=0)
+    fake_attempt_count: Mapped[int] = mapped_column(Integer, default=0)
+    courier_disputes_count: Mapped[int] = mapped_column(Integer, default=0)
+    
     start_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     feedbacks: Mapped[list["Feedback"]] = relationship(back_populates="customer")
