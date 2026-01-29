@@ -4,6 +4,7 @@ from typing import Optional
 class UserBase(BaseModel):
     email: EmailStr
     full_name: Optional[str] = None
+    role: Optional[str] = "merchant"
     is_active: Optional[bool] = True
     is_superuser: bool = False
 

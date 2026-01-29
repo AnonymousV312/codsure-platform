@@ -77,3 +77,15 @@ async def create_user_signup(
     await db.commit()
     await db.refresh(user)
     return user
+
+@router.post("/dev/make-me-admin")
+async def dev_make_me_admin(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    DEV ONLY: Make the current user an admin.
+    """
+    current_user.role = "admin"
+    await db.commit()
+    return {"status": "success", "new_role": "admin", "details": "Please re-login to see admin features"}

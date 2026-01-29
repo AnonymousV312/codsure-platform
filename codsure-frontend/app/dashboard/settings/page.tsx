@@ -1,6 +1,11 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import api from "@/lib/api"
+import { useAuth } from "@/components/providers/AuthContext"
 
 export default function SettingsPage() {
     return (
@@ -49,6 +54,42 @@ export default function SettingsPage() {
                     </form>
                 </CardContent>
             </Card>
+
+            <Card className="border-red-200 dark:border-red-900/50">
+                <CardHeader>
+                    <CardTitle className="text-red-500">Developer Tools</CardTitle>
+                    <CardDescription>Internal tools for testing.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <MakeMeAdminButton />
+                </CardContent>
+            </Card>
         </div>
+    )
+}
+
+function MakeMeAdminButton() {
+    const [loading, setLoading] = useState(false)
+    const { logout } = useAuth()
+
+    const handleMakeAdmin = async () => {
+        if (!confirm("This will make you an admin and log you out. Continue?")) return
+        setLoading(true)
+        try {
+            await api.post("/auth/dev/make-me-admin")
+            alert("Success! You are now an admin. Please log in again.")
+            logout()
+        } catch (e) {
+            console.error(e)
+            alert("Failed to update role")
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <Button variant="destructive" onClick={handleMakeAdmin} disabled={loading}>
+            {loading ? "Processing..." : "Become Admin (Dev)"}
+        </Button>
     )
 }

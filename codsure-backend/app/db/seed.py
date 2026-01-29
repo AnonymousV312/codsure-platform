@@ -18,7 +18,23 @@ async def seed_data():
     async with AsyncSessionLocal() as db:
         print("Seeding data...")
         
-        # 1. Create Demo User if not exists
+        # 1A. Create Admin User
+        result = await db.execute(select(User).where(User.email == "admin@codsure.io"))
+        admin = result.scalars().first()
+        if not admin:
+            admin = User(
+                email="admin@codsure.io",
+                hashed_password=security.get_password_hash("admin123"),
+                full_name="Super Admin",
+                role="admin",
+                is_active=True,
+                is_superuser=True
+            )
+            db.add(admin)
+            await db.commit()
+            print("Created admin user: admin@codsure.io")
+
+        # 1B. Create Demo Merchant User if not exists
         result = await db.execute(select(User).where(User.email == "demo@codsure.io"))
         user = result.scalars().first()
         
