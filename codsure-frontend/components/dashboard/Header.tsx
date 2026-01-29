@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Bell } from "lucide-react"
+import { MobileSidebar } from "@/components/dashboard/MobileSidebar"
 
 export function Header() {
     return (
         <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
+            <MobileSidebar />
             <div className="w-full flex-1">
                 <form>
                     <div className="relative">

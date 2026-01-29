@@ -13,7 +13,7 @@ export default function Home() {
             <SiteHeader />
             <main className="flex-1">
                 {/* Hero Section */}
-                <section className="relative overflow-hidden py-24 md:py-32 lg:py-40">
+                <section className="relative overflow-hidden py-12 md:py-32 lg:py-40">
                     <div className="container relative z-10 px-4 md:px-6">
                         <div className="mx-auto flex max-w-[900px] flex-col items-center text-center">
                             <motion.div
@@ -49,10 +49,10 @@ export default function Home() {
                                 transition={{ duration: 0.5, delay: 0.3 }}
                             >
                                 <Link href="/auth?signup=true">
-                                    <Button size="lg" className="h-12 px-8 text-base">Install on Shopify</Button>
+                                    <Button size="lg" className="h-10 md:h-12 px-6 md:px-8 text-sm md:text-base">Install on Shopify</Button>
                                 </Link>
                                 <Link href="/how-it-works">
-                                    <Button variant="outline" size="lg" className="h-12 px-8 text-base">See How It Works</Button>
+                                    <Button variant="outline" size="lg" className="h-10 md:h-12 px-6 md:px-8 text-sm md:text-base">See How It Works</Button>
                                 </Link>
                             </motion.div>
                         </div>
