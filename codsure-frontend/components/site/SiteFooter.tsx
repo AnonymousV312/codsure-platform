@@ -8,7 +8,7 @@ export function SiteFooter() {
                 <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
                     <div className="col-span-2 md:col-span-1">
                         <Link className="flex items-center space-x-2 font-bold" href="/">
-                            <ShieldCheck className="h-6 w-6 text-primary" />
+                            <img src="/logo.png" alt="CODSure" className="h-6 w-6 rounded-sm bg-primary/10 p-0.5" />
                             <span>CODSure</span>
                         </Link>
                         <p className="mt-4 text-xs text-muted-foreground leading-relaxed">

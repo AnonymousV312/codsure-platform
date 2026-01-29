@@ -13,7 +13,7 @@ export function AdminSidebar() {
             <div className="flex h-full max-h-screen flex-col gap-2">
                 <div className="flex h-14 items-center border-b border-gray-800 px-6">
                     <Link className="flex items-center gap-2 font-semibold" href="/admin">
-                        <ShieldAlert className="h-6 w-6 text-red-500" />
+                        <img src="/logo.png" alt="CODSure Admin" className="h-8 w-8 rounded-md bg-white p-0.5" />
                         <span className="">CODSure Admin</span>
                     </Link>
                 </div>

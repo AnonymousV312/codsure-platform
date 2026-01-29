@@ -8,7 +8,7 @@ export function Sidebar() {
             <div className="flex h-full max-h-screen flex-col gap-2">
                 <div className="flex h-14 items-center border-b px-6">
                     <Link className="flex items-center gap-2 font-semibold" href="/dashboard">
-                        <ShieldCheck className="h-6 w-6 text-primary" />
+                        <img src="/logo.png" alt="CODSure" className="h-6 w-6 rounded-md" />
                         <span className="">CODSure</span>
                     </Link>
                 </div>
