@@ -1,21 +1,56 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DollarSign, ShoppingCart, Ban, ShieldCheck } from "lucide-react"
+"use client"
+
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { DollarSign, ShoppingCart, Ban, ShieldCheck, RefreshCcw } from "lucide-react"
+import { useDashboardStats } from "@/lib/hooks/useDashboard"
+import { Overview } from "@/components/dashboard/Overview"
+import { RecentSales } from "@/components/dashboard/RecentSales"
+import { Button } from "@/components/ui/button"
+import api from "@/lib/api"
+import { useState } from "react"
 
 export default function DashboardPage() {
+    const { stats, isLoading: statsLoading } = useDashboardStats()
+    const [seeding, setSeeding] = useState(false)
+
+    const handleSeed = async () => {
+        setSeeding(true)
+        try {
+            await api.post("/dashboard/seed")
+            window.location.reload()
+        } catch (e) {
+            console.error(e)
+            alert("Failed to seed - check console")
+        } finally {
+            setSeeding(false)
+        }
+    }
+
+    if (statsLoading) {
+        return <div className="flex h-screen items-center justify-center">Loading Dashboard...</div>
+    }
+
+    // Default to zero if stats failed to load or are empty
+    const s = stats || { total_revenue: 0, total_orders: 0, return_rate: 0, risk_blocked_count: 0 }
+
     return (
         <div className="flex flex-col gap-8">
             <div className="flex items-center justify-between">
                 <h1 className="text-lg font-semibold md:text-2xl">Overview</h1>
+                <Button variant="outline" size="sm" onClick={handleSeed} disabled={seeding}>
+                    <RefreshCcw className={`mr-2 h-4 w-4 ${seeding ? 'animate-spin' : ''}`} />
+                    {seeding ? 'Seeding...' : 'Reset/Seed Data'}
+                </Button>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Estimated Saved</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">PKR 45,231.89</div>
-                        <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                        <div className="text-2xl font-bold">₨ {s.total_revenue.toLocaleString()}</div>
+                        <p className="text-xs text-muted-foreground">From {s.total_orders} orders</p>
                     </CardContent>
                 </Card>
                 <Card>
@@ -24,65 +59,49 @@ export default function DashboardPage() {
                         <ShoppingCart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+2350</div>
-                        <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                        <div className="text-2xl font-bold">{s.total_orders}</div>
+                        <p className="text-xs text-muted-foreground">All time</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Blocked (Risk)</CardTitle>
-                        <Ban className="h-4 w-4 text-muted-foreground" />
+                        <Ban className="h-4 w-4 text-red-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">122</div>
-                        <p className="text-xs text-muted-foreground">+19% from last month</p>
+                        <div className="text-2xl font-bold">{s.risk_blocked_count}</div>
+                        <p className="text-xs text-muted-foreground">High risk orders blocked</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Store Trust Score</CardTitle>
-                        <ShieldCheck className="h-4 w-4 text-green-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-green-600">98/100</div>
-                        <p className="text-xs text-muted-foreground">Top Rated Seller</p>
-                        <p className="text-xs text-gray-500 mt-1">Based on 124 verified reviews</p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Risk Accuracy</CardTitle>
+                        <CardTitle className="text-sm font-medium">Return Rate</CardTitle>
                         <ShieldCheck className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">98.5%</div>
-                        <p className="text-xs text-muted-foreground">Based on delivery feedback</p>
+                        <div className="text-2xl font-bold">{s.return_rate}%</div>
+                        <p className="text-xs text-muted-foreground">Average across store</p>
                     </CardContent>
                 </Card>
             </div>
-            <div>
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <Card className="col-span-4">
                     <CardHeader>
+                        <CardTitle>Overview</CardTitle>
+                        <CardDescription>Daily revenue for the last 30 days</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pl-2">
+                        <Overview />
+                    </CardContent>
+                </Card>
+                <Card className="col-span-3">
+                    <CardHeader>
                         <CardTitle>Recent Risk Decisions</CardTitle>
+                        <CardDescription>Latest orders processed by CODSure</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <div key={i} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-2 h-2 rounded-full bg-green-500" />
-                                        <div>
-                                            <p className="text-sm font-medium leading-none">Order #ORD-{1000 + i}</p>
-                                            <p className="text-sm text-muted-foreground">Karachi • 0300-1234567</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-4">
-                                        <div className="text-sm font-bold text-green-600">COD APPROVED</div>
-                                        <div className="text-sm text-muted-foreground">PKR 4,500</div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        <RecentSales />
                     </CardContent>
                 </Card>
             </div>
