@@ -6,6 +6,7 @@ from sqlalchemy import select
 import hmac
 import hashlib
 import json
+import os
 
 from app.api import deps
 from app.core.config import settings
