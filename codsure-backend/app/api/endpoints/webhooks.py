@@ -120,3 +120,18 @@ async def handle_shopify_order(
     
     await db.commit()
     return {"status": "success"}
+
+@router.post("/shopify/gdpr/customers_data_request")
+async def gdpr_customers_data_request(request: Request):
+    """Placeholder for GDPR data request"""
+    return {"status": "ok"}
+
+@router.post("/shopify/gdpr/customers_redact")
+async def gdpr_customers_redact(request: Request):
+    """Placeholder for GDPR customer redact"""
+    return {"status": "ok"}
+
+@router.post("/shopify/gdpr/shop_redact")
+async def gdpr_shop_redact(request: Request):
+    """Placeholder for GDPR shop redact"""
+    return {"status": "ok"}

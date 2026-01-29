@@ -2,11 +2,11 @@
 
 name = "CODSure Risk Intelligence"
 client_id = "SHOPIFY_CLIENT_ID"
-application_url = "https://codsure-backend.onrender.com"
+application_url = "https://codsure.pk"
 embedded = true
 
 [webhooks]
-api_version = "2024-01"
+api_version = "2026-01"
 
 [access_scopes]
 # Scopes needed for order reading and fulfillment services
