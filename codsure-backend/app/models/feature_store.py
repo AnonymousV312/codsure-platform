@@ -2,7 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Integer, Float, DateTime
 from sqlalchemy.sql import func
 from datetime import datetime
-from app.db.base import Base
+from app.db.base_class import Base
 
 class CustomerFeatures(Base):
     __tablename__ = "customer_features"

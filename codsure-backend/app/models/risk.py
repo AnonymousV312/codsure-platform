@@ -2,7 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, Boolean, JSON, ForeignKey, DateTime
 from sqlalchemy.sql import func
 from datetime import datetime
-from app.db.base import Base
+from app.db.base_class import Base
 
 class RiskRule(Base):
     __tablename__ = "risk_rules"

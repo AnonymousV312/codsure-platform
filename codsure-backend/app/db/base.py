@@ -1,9 +1,4 @@
-from typing import Any
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.ext.asyncio import AsyncAttrs
-
-class Base(AsyncAttrs, DeclarativeBase):
-    pass
+from app.db.base_class import Base
 
 # Import models for Alembic/Initialisation
 from app.models.user import User
