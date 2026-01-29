@@ -1,0 +1,15 @@
+api_version = "2024-01"
+
+[[extensions]]
+type = "ui_extension"
+name = "CODSure Risk Checker"
+handle = "cod-risk-checker"
+
+# The extension points where this UI extension will render
+[[extensions.targeting]]
+target = "purchase.checkout.block.render"
+module = "./src/Checkout.jsx"
+
+[extensions.capabilities]
+network_access = true
+block_progress = true

@@ -1,0 +1,19 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "CODSure Risk Intelligence"
+client_id = "SHOPIFY_CLIENT_ID"
+application_url = "https://codsure-backend.onrender.com"
+embedded = true
+
+[webhooks]
+api_version = "2024-01"
+
+[access_scopes]
+# Scopes needed for order reading and fulfillment services
+scopes = "read_orders,write_orders,read_customers,read_fulfillments"
+
+[auth]
+redirect_urls = [
+  "https://codsure-backend.onrender.com/api/v1/shopify/callback",
+  "https://codsure-backend.onrender.com/api/v1/shopify/install"
+]
