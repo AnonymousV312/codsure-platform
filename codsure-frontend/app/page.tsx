@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { SiteHeader } from "@/components/site/SiteHeader"
 import { SiteFooter } from "@/components/site/SiteFooter"
 import { motion } from "framer-motion"
-import { ArrowRight, Ban, CheckCircle2, DollarSign, ShieldCheck, TrendingUp, Truck, Users, XCircle } from "lucide-react"
+import { ArrowDown, ArrowRight, Ban, CheckCircle2, DollarSign, ShieldCheck, TrendingUp, Truck, Users, XCircle } from "lucide-react"
 
 export default function LandingPage() {
     return (
