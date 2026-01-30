@@ -23,7 +23,7 @@ export default function HowItWorks() {
                             {/* Step 1 */}
                             <div className="relative flex flex-col md:flex-row md:items-center gap-8">
                                 <div className="ml-16 md:ml-0 md:w-1/2 md:text-right">
-                                    <h3 className="text-xl font-bold">1. Install & Connect</h3>
+                                    <h3 className="text-xl font-bold text-slate-900">1. Install & Connect</h3>
                                     <p className="mt-2 text-muted-foreground">Add CODSure to your Shopify store with one click. We automatically sync your past 60 days of orders to train your risk model instantly.</p>
                                 </div>
                                 <div className="absolute left-0 h-14 w-14 rounded-full border-4 border-background bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl md:left-1/2 md:-translate-x-1/2">1</div>
@@ -38,7 +38,7 @@ export default function HowItWorks() {
                             {/* Step 2 */}
                             <div className="relative flex flex-col md:flex-row-reverse md:items-center gap-8">
                                 <div className="ml-16 md:ml-0 md:w-1/2 md:text-left">
-                                    <h3 className="text-xl font-bold">2. Define Your Rules</h3>
+                                    <h3 className="text-xl font-bold text-slate-900">2. Define Your Rules</h3>
                                     <p className="mt-2 text-muted-foreground">Set your tolerance. Want to block everyone from a specific city? Or require 20% advance for orders over 10k? You are in control.</p>
                                 </div>
                                 <div className="absolute left-0 h-14 w-14 rounded-full border-4 border-background bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl md:left-1/2 md:-translate-x-1/2">2</div>
@@ -52,7 +52,7 @@ export default function HowItWorks() {
                             {/* Step 3 */}
                             <div className="relative flex flex-col md:flex-row md:items-center gap-8">
                                 <div className="ml-16 md:ml-0 md:w-1/2 md:text-right">
-                                    <h3 className="text-xl font-bold">3. Checkout Protection</h3>
+                                    <h3 className="text-xl font-bold text-slate-900">3. Checkout Protection</h3>
                                     <p className="mt-2 text-muted-foreground">When a customer reaches checkout, CODSure silently evaluates them. If they are risky, the COD option is hidden or they are prompted to pay an advance.</p>
                                 </div>
                                 <div className="absolute left-0 h-14 w-14 rounded-full border-4 border-background bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl md:left-1/2 md:-translate-x-1/2">3</div>
@@ -66,7 +66,7 @@ export default function HowItWorks() {
                             {/* Step 4 */}
                             <div className="relative flex flex-col md:flex-row-reverse md:items-center gap-8">
                                 <div className="ml-16 md:ml-0 md:w-1/2 md:text-left">
-                                    <h3 className="text-xl font-bold">4. Ship Confidently</h3>
+                                    <h3 className="text-xl font-bold text-slate-900">4. Ship Confidently</h3>
                                     <p className="mt-2 text-muted-foreground">You only see orders that have passed your checks. Ship them knowing they are 3x more likely to be delivered.</p>
                                 </div>
                                 <div className="absolute left-0 h-14 w-14 rounded-full border-4 border-background bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl md:left-1/2 md:-translate-x-1/2">4</div>

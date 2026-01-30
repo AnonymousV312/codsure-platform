@@ -123,14 +123,14 @@ export default function LandingPage() {
                                 {/* Step 1 */}
                                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center text-center">
                                     <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 text-xl font-bold">1</div>
-                                    <h3 className="text-xl font-bold mb-2">Order Placed</h3>
+                                    <h3 className="text-xl font-bold mb-2 text-slate-900">Order Placed</h3>
                                     <p className="text-slate-600 text-sm">Customer hits 'Buy Now' on your store.</p>
                                 </div>
 
                                 {/* Step 2 */}
                                 <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-xl border-4 border-emerald-500/20 flex flex-col items-center text-center scale-105 transform">
                                     <div className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mb-4 text-xl font-bold">2</div>
-                                    <h3 className="text-xl font-bold mb-2">Risk Analyzed</h3>
+                                    <h3 className="text-xl font-bold mb-2 text-white">Risk Analyzed</h3>
                                     <p className="text-slate-300 text-sm">We check their history, phone, and address instantly.</p>
                                     <div className="mt-4 inline-flex items-center bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/50">
                                         <ShieldCheck className="w-3 h-3 mr-1" /> SAFETY CHECK
@@ -140,9 +140,101 @@ export default function LandingPage() {
                                 {/* Step 3 */}
                                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center text-center">
                                     <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 text-xl font-bold">3</div>
-                                    <h3 className="text-xl font-bold mb-2">Action Taken</h3>
+                                    <h3 className="text-xl font-bold mb-2 text-slate-900">Action Taken</h3>
                                     <p className="text-slate-600 text-sm">Safe? COD Approved. <br />Risky? Advance Required.</p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Universal Customer Data (Core Value) */}
+                <section className="py-20 md:py-32 bg-white">
+                    <div className="container px-4 md:px-6">
+                        <div className="grid md:grid-cols-2 gap-12 items-center">
+                            <div className="order-2 md:order-1 bg-slate-100 rounded-3xl p-8 border border-slate-200">
+                                <div className="space-y-4">
+                                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4">
+                                        <div className="h-10 w-10 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold">K</div>
+                                        <div>
+                                            <div className="font-bold text-slate-900">Khaadi</div>
+                                            <div className="text-xs text-red-500">Refused 3 orders</div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4 opacity-50">
+                                        <div className="h-10 w-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">O</div>
+                                        <div>
+                                            <div className="font-bold text-slate-900">Outfitters</div>
+                                            <div className="text-xs text-green-600">Delivered</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-center">
+                                        <ArrowDown className="text-slate-400" />
+                                    </div>
+                                    <div className="bg-slate-900 text-white p-6 rounded-xl shadow-xl flex items-center gap-4">
+                                        <div className="h-12 w-12 bg-emerald-500 rounded-full flex items-center justify-center">
+                                            <ShieldCheck className="h-6 w-6 text-white" />
+                                        </div>
+                                        <div>
+                                            <div className="font-bold text-lg">Your Store</div>
+                                            <div className="text-sm text-slate-300">
+                                                Customer Blocked automatically (Bad History)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="order-1 md:order-2">
+                                <div className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 mb-6">
+                                    <Users className="w-4 h-4 mr-2" /> Universal Intelligence
+                                </div>
+                                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-slate-900 mb-6">
+                                    Don't Limit Yourself to <br />Store-Level Data
+                                </h2>
+                                <p className="text-lg text-slate-600 leading-relaxed mb-6">
+                                    Most fraud tools only learn from <em>your</em> past orders. CODSure connects you to a network of thousands of merchants.
+                                </p>
+                                <ul className="space-y-4">
+                                    <li className="flex items-start">
+                                        <CheckCircle2 className="h-6 w-6 text-emerald-500 mr-3 mt-0.5" />
+                                        <span className="text-slate-700"><strong>First-Time Visitors Detected:</strong> Even if a customer has never visited your site, we know if they refused orders elsewhere.</span>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <CheckCircle2 className="h-6 w-6 text-emerald-500 mr-3 mt-0.5" />
+                                        <span className="text-slate-700"><strong>Crowdsourced Blacklists:</strong> Block professional fake order bots identified by the community.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Courier Accountability Section */}
+                <section className="py-20 bg-slate-50 border-y border-slate-200">
+                    <div className="container px-4 md:px-6 text-center">
+                        <div className="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700 mb-6">
+                            <Truck className="w-4 h-4 mr-2" /> Courier Accountability
+                        </div>
+                        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-slate-900 mb-4">
+                            Hold Couriers Accountable
+                        </h2>
+                        <p className="max-w-2xl mx-auto text-lg text-slate-600 mb-12">
+                            Stop paying for "Customer Refused" when the courier never showed up.
+                            CODSure enforces discipline across the entire chain—not just the customer.
+                        </p>
+
+                        <div className="grid md:grid-cols-3 gap-8 text-left max-w-5xl mx-auto">
+                            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                <h3 className="text-lg font-bold text-slate-900 mb-2">1. Failed Delivery Webhooks</h3>
+                                <p className="text-slate-600">We track every failed attempt. If a courier marks "Refused" without a call/SMS, we flag it.</p>
+                            </div>
+                            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                <h3 className="text-lg font-bold text-slate-900 mb-2">2. Dispute Resolution</h3>
+                                <p className="text-slate-600">Merchant-led disputes allow you to protect your customer's score from courier negligence.</p>
+                            </div>
+                            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                <h3 className="text-lg font-bold text-slate-900 mb-2">3. Fair Scoring</h3>
+                                <p className="text-slate-600">Courier-at-fault failures DO NOT lower the customer's trust score. We protect good buyers.</p>
                             </div>
                         </div>
                     </div>
