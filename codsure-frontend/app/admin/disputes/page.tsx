@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useSWR } from "@/lib/hooks/useDashboard" // Assuming generic fetcher via useSWR config or standard SWR
+import useSWR from "swr"
 import api from "@/lib/api"
 import { SiteHeader } from "@/components/site/SiteHeader"
 import { Button } from "@/components/ui/button"
@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle2, XCircle, AlertTriangle } from "lucide-react"
 
 // Mock fetcher for now until we have a dedicated hook
-import useSWRRaw from "swr"
+
 
 export default function AdminDisputesPage() {
     // In real implementation, fetching from /api/v1/admin/disputes or similar
