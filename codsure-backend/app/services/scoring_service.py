@@ -50,6 +50,12 @@ class ScoringService:
             customer.fake_attempt_count += 1
             customer.cod_score = max(0.0, customer.cod_score - 5.0)
             
+        elif event_type == "DISPUTE_RESOLVED_COURIER_FAULT":
+            # Reverse the Refusal penalty (assuming it was -2.0)
+            # This logic assumes the dispute is resolving a previous "REFUSED" event penalty
+            customer.refused_orders = max(0, customer.refused_orders - 1)
+            customer.cod_score = min(10.0, customer.cod_score + 2.0)
+            
         # Update Tier
         if customer.cod_score >= 7.0:
             customer.trust_tier = "TRUSTED"

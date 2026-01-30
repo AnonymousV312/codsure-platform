@@ -134,3 +134,24 @@ async def list_system_events(
     result = await db.execute(query)
     events = result.scalars().all()
     return events
+
+@router.get("/customers/search")
+async def search_customers(
+    q: str, # Phone or Name
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(check_admin_privileges),
+) -> Any:
+    """
+    Search customers globally (cross-merchant) by phone or name.
+    """
+    from app.models.trust import Customer
+    
+    # Simple like query
+    query = select(Customer).where(
+        (Customer.phone.ilike(f"%{q}%")) | 
+        (Customer.name.ilike(f"%{q}%"))
+    ).limit(20)
+    
+    result = await db.execute(query)
+    customers = result.scalars().all()
+    return customers
