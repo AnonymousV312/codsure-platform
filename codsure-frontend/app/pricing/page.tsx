@@ -13,7 +13,7 @@ export default function PricingPage() {
             <main className="flex-1 py-24">
                 <div className="container px-4 md:px-6">
                     <div className="mx-auto max-w-[800px] text-center mb-16">
-                        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">Simple, Transparent Pricing</h1>
+                        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-slate-900">Simple, Transparent Pricing</h1>
                         <p className="mt-4 text-xl text-muted-foreground">Start for free. Scale as you grow. No hidden commissions.</p>
                     </div>
 

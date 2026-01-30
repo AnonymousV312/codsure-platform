@@ -13,7 +13,7 @@ export function SiteHeader() {
                     <SiteMobileMenu />
                     <Link className="flex items-center space-x-2 font-bold" href="/">
                         <img src="/logo.png" alt="CODSure" className="h-8 w-8 rounded-md" />
-                        <span className="hidden sm:inline-block">CODSure</span>
+                        <span className="font-bold text-slate-900">CODSure</span>
                     </Link>
                 </div>
 

@@ -3,7 +3,7 @@ import { ShieldCheck } from "lucide-react"
 
 export function SiteFooter() {
     return (
-        <footer className="border-t bg-gray-50 dark:bg-gray-900/50">
+        <footer className="border-t bg-slate-50 text-slate-900">
             <div className="container px-4 py-12 md:px-6 md:py-16">
                 <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
                     <div className="col-span-2 md:col-span-1">
