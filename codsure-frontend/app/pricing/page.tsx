@@ -19,64 +19,64 @@ export default function PricingPage() {
 
                     <div className="grid gap-8 md:grid-cols-3 max-w-[1000px] mx-auto">
                         {/* Free Tier */}
-                        <div className="rounded-xl border bg-card p-8 shadow-sm">
-                            <h3 className="text-lg font-semibold">Starter</h3>
+                        <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+                            <h3 className="text-lg font-semibold text-slate-900">Starter</h3>
                             <div className="mt-4 flex items-baseline">
-                                <span className="text-3xl font-bold">Free</span>
+                                <span className="text-3xl font-bold text-slate-900">Free</span>
                             </div>
-                            <p className="mt-2 text-sm text-muted-foreground">For new stores testing the waters.</p>
-                            <ul className="mt-6 space-y-3 text-sm">
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Up to 50 orders/month</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Basic Risk Rules</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Analytics Dashboard</li>
+                            <p className="mt-2 text-sm text-slate-600">For new stores testing the waters.</p>
+                            <ul className="mt-6 space-y-3 text-sm text-slate-700">
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Up to 50 orders/month</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Basic Risk Rules</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Analytics Dashboard</li>
                             </ul>
                             <div className="mt-8">
                                 <Link href="/auth?signup=true">
-                                    <Button variant="outline" className="w-full">Get Started</Button>
+                                    <Button variant="outline" className="w-full border-slate-300 text-slate-900">Get Started</Button>
                                 </Link>
                             </div>
                         </div>
 
                         {/* Pro Tier */}
-                        <div className="rounded-xl border-2 border-primary bg-card p-8 shadow-md relative">
-                            <div className="absolute top-0 right-0 -mt-3 -mr-3 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold rounded-full">
+                        <div className="rounded-xl border-2 border-primary bg-white p-8 shadow-lg relative transform md:-translate-y-4">
+                            <div className="absolute top-0 right-0 -mt-3 -mr-3 bg-primary text-white px-3 py-1 text-xs font-bold rounded-full shadow-md">
                                 POPULAR
                             </div>
-                            <h3 className="text-lg font-semibold">Growth</h3>
+                            <h3 className="text-lg font-semibold text-slate-900">Growth</h3>
                             <div className="mt-4 flex items-baseline">
-                                <span className="text-3xl font-bold">PKR 5,000</span>
-                                <span className="ml-1 text-muted-foreground">/mo</span>
+                                <span className="text-3xl font-bold text-slate-900">PKR 5,000</span>
+                                <span className="ml-1 text-slate-500">/mo</span>
                             </div>
-                            <p className="mt-2 text-sm text-muted-foreground">For growing brands reducing RTOs.</p>
-                            <ul className="mt-6 space-y-3 text-sm">
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Up to 1,000 orders/month</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Advanced AI Rules</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Partial Advance Collection</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Priority Support</li>
+                            <p className="mt-2 text-sm text-slate-600">For growing brands reducing RTOs.</p>
+                            <ul className="mt-6 space-y-3 text-sm text-slate-700">
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Up to 1,000 orders/month</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Advanced AI Rules</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Partial Advance Collection</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Priority Support</li>
                             </ul>
                             <div className="mt-8">
                                 <Link href="/auth?signup=true">
-                                    <Button className="w-full">Start 14-Day Trial</Button>
+                                    <Button className="w-full shadow-lg">Start 14-Day Trial</Button>
                                 </Link>
                             </div>
                         </div>
 
                         {/* Scale Tier */}
-                        <div className="rounded-xl border bg-card p-8 shadow-sm">
-                            <h3 className="text-lg font-semibold">Scale</h3>
+                        <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+                            <h3 className="text-lg font-semibold text-slate-900">Scale</h3>
                             <div className="mt-4 flex items-baseline">
-                                <span className="text-3xl font-bold">PKR 15,000</span>
-                                <span className="ml-1 text-muted-foreground">/mo</span>
+                                <span className="text-3xl font-bold text-slate-900">PKR 15,000</span>
+                                <span className="ml-1 text-slate-500">/mo</span>
                             </div>
-                            <p className="mt-2 text-sm text-muted-foreground">For high-volume powerhouses.</p>
-                            <ul className="mt-6 space-y-3 text-sm">
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Unlimited orders</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Custom Risk Models</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Dedicated Account Manager</li>
-                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> API Access</li>
+                            <p className="mt-2 text-sm text-slate-600">For high-volume powerhouses.</p>
+                            <ul className="mt-6 space-y-3 text-sm text-slate-700">
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Unlimited orders</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Custom Risk Models</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Dedicated Account Manager</li>
+                                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> API Access</li>
                             </ul>
                             <div className="mt-8">
-                                <Button variant="outline" className="w-full">Contact Sales</Button>
+                                <Button variant="outline" className="w-full border-slate-300 text-slate-900">Contact Sales</Button>
                             </div>
                         </div>
                     </div>

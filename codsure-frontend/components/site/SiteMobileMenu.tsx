@@ -16,7 +16,7 @@ export function SiteMobileMenu() {
             </Button>
 
             {open && (
-                <div className="fixed inset-0 z-[100] flex flex-col bg-white text-slate-900 animate-in slide-in-from-top duration-200">
+                <div className="fixed inset-0 z-[100] flex flex-col bg-white text-slate-900 animate-in slide-in-from-top duration-200 shadow-2xl">
                     <div className="flex h-16 items-center justify-between px-4 border-b border-slate-100">
                         <span className="font-bold text-lg">Menu</span>
                         <Button variant="ghost" size="icon" onClick={() => setOpen(false)} className="text-slate-900">
